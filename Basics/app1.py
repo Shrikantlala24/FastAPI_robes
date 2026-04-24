@@ -11,3 +11,6 @@ app = FastAPI(
 async def root():
     return {"message": "Hello, World!", "answer": "it's nothing, just another key-value pair"}
 
+@app.get("/hutt")
+async def check():
+    return {"message": "trail function creation"}
