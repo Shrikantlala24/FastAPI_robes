@@ -9,5 +9,5 @@ app = FastAPI(
 
 @app.get("/")
 async def root():
-    return {"message": "Hello, World!"}
+    return {"message": "Hello, World!", "answer": "it's nothing, just another key-value pair"}
 
