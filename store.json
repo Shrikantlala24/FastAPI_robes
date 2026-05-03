@@ -1,0 +1,13 @@
+{
+    "P001": {
+        "name": "Laptop",
+        "price": 999.99,
+        "quantity": 10
+    },
+    "P002": {
+        "name": "Smartphone",
+        "price": 499.99,
+        "quantity": 20
+    }
+    
+}
