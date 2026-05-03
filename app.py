@@ -1,21 +1,18 @@
-# right now we'll make a simple to-do app as for trial
-
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-task_list = []
-
-
-class task(BaseModel):
-    title : str
-    
 app = FastAPI()
 
-@app.post("/tasks")
-def add_task(task : Task):
-    task_list.append()
+tasks = []
 
+class Task(BaseModel):
+    title: str
+
+@app.post("/tasks")
+def add_task(task: Task):
+    tasks.append(task.title)
+    return {"message": "Task added", "tasks": tasks}
 
 @app.get("/tasks")
 def get_tasks():
-    return {"Tasks :",task_list}
+    return {"tasks": tasks}
