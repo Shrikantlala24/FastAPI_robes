@@ -14,9 +14,9 @@ if st.button("view data"):
     res2 = res2.json()
     st.write(res2)
 
-    
-    # for item in res2:
-    #     st.write(f"Product Name: {item['name']}")
-    #     st.write(f"Price: {item['price']}")
-    #     st.write(f"Description: {item['description']}")
-    #     st.write("---")
+
+    for pid, item in res2.items():
+        st.write(f"ID: {pid}")
+        st.write(f"Product Name: {item['name']}")
+        st.write(f"Price: {item['price']}")
+        st.write("---")
