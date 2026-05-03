@@ -1,4 +1,21 @@
-import streamlit as st
-import requests
+# right now we'll make a simple to-do app as for trial
 
-# todo we'll create a simple app where we are taking inputs from the user and then sending it to the backend and then showing the response from the backend
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+task_list = []
+
+
+class task(BaseModel):
+    title : str
+    
+app = FastAPI()
+
+@app.post("/tasks")
+def add_task(task : Task):
+    task_list.append()
+
+
+@app.get("/tasks")
+def get_tasks():
+    return {"Tasks :",task_list}
