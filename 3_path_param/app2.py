@@ -5,7 +5,7 @@ import json
 
 
 def load_data():
-    with open('store.json') as f:
+    with open('../store.json') as f:
         data = json.load(f)
     return data
 
