@@ -5,12 +5,12 @@ import requests
 
 st.title("Product Store")
 if st.button('Get response'):
-    res = requests.get("http://localhost:8009/about")
+    res = requests.get("http://localhost:8000/about")
     res = res.json()
     st.write(f"{res['mesafe']}")
 
 if st.button("view data"):
-    res2  = requests.get("http://localhost:8009/view")
+    res2  = requests.get("http://localhost:8000/view")
     res2 = res2.json()
     st.write(res2)
 
