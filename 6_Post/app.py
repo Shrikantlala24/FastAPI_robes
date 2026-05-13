@@ -1,13 +1,14 @@
 from fastapi import FastAPI, HTTPException
-import json
+from fastapi.responses import JSONResponse
 
+import json
 from pydantic import BaseModel, Field, computed_field
 from typing import Annotated, Literal
 
 app = FastAPI()
 
 class Patient(BaseModel) :
-    pid : Annotated[
+    id : Annotated[
         str,
         Field(...,description='Enter the Patient ID', examples=['P001'])
     ]
@@ -43,13 +44,22 @@ class Patient(BaseModel) :
             self.weight/(self.height **2),
             2
         )
-    
+
+
+# methods needed to operate on data
+# 1. Load_data
+
 def load_data():
     with open('../store.json', 'r') as f:
         return json.load(f)
-    
-data = load_data()    
 
+# 2. Save the data
+def save_data(data):
+    with open('../store.json','w') as main:
+        json.dump(data,main)
+
+
+# Basic API endpoints
 @app.get("/")
 def root():
     return {"message": "Hello, World!"}
@@ -58,6 +68,25 @@ def root():
 def about():
     return {"message": "This is the about page."}
 
+
+@app.get("/view")
+def view_data():
+
+# Here is the main endpoint :-
+#? Post method to create patients
+
 @app.post('/create')
 def create_patient(patient : Patient):
-    pass
+    # Load the data
+    data = load_data()    
+
+    # Check if the patient ID already exists
+    if patient.pid in data:
+        raise HTTPException(status_code=400, detail='patient already exist')
+
+    # add new patient in the data
+    data[patient.id] = patient.model_dump(exclude='id')
+
+    # save the data in the JSON file
+    save_data(data)
+    raise JSONResponse(status_code=201, content = {'message':'Patient succesfully created ✅'})
