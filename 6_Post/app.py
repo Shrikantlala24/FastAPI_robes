@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 import json
 
-from pydantic import BaseModel, Field, compute_field
+from pydantic import BaseModel, Field, computed_field
 from typing import Annotated, Literal
 
 app = FastAPI()
@@ -36,7 +36,7 @@ class Patient(BaseModel) :
         Field(..., gt=0,description='Enter the Patient weight')
     ]
 
-    @compute_field
+    @computed_field
     @property
     def bmi(self) -> float:
         return round(
@@ -60,3 +60,4 @@ def about():
 
 @app.post('/create')
 def create_patient(patient : Patient):
+    pass
