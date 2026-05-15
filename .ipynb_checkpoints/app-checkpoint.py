@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
+
 import json
 
 from typing import Annotated, Literal
@@ -51,7 +53,8 @@ def load_data():
         return json.load(f)
 
 def save_data(data):
-    pass
+    with open('/store.json','w') as f:
+        json.dump(data,f)
 
 app = FastAPI()
 
@@ -76,3 +79,13 @@ def create_patient(p : Patient) :
 
     # load the data
     data = load_data()
+
+    # check if patient already exists
+    if p.id in data :
+        raise HTTPException(status_code= 400, detail = 'patient already exists')
+
+    # insert the 'patient' in 'data'
+    data[p.id] = p.model_dump(exclude='id')
+
+    # save the data in the JSON database
+    save_data(data)
