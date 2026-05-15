@@ -49,11 +49,11 @@ class Patient(BaseModel) :
 # here are the operations done on the database (right now it's JSON database)
 
 def load_data():
-    with open('/store.json', 'r') as f:
+    with open('store.json', 'r') as f:
         return json.load(f)
 
 def save_data(data):
-    with open('/store.json','w') as f:
+    with open('store.json','w') as f:
         json.dump(data,f)
 
 app = FastAPI()
@@ -68,6 +68,12 @@ def about():
         'purpose' : 'the main purpose is to serve an API-endpoint to the hospital frontend so that they can operate on Paitent data',
         'Operations' : ' CRUD '
     }
+
+@app.get("/view")
+def view_patients():
+    data = load_data()
+    return data
+
 
     
 # ----------------------------------------------------------------------------------------------------------------
