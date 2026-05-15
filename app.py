@@ -89,3 +89,4 @@ def create_patient(p : Patient) :
 
     # save the data in the JSON database
     save_data(data)
+    return JSONResponse(status_code = 201, content = {'message': 'Paitent created Succesfully and inserted in the Database'})
