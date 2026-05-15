@@ -6,4 +6,50 @@ from pydantic import BaseModel, Field, computed_field
 
 
 class Patient(BaseModel) :
-    
+    id : Annotated[
+        str,
+        Field(..., description='enter the patient ID', examples=['P001'])
+    ]
+    name : Annotated[
+        str,
+        Field(..., description='enter the patient name')
+    ]
+    city : Annotated[
+        str,
+        Field(..., description='enter the patient city')
+    ]
+    age : Annotated[
+        int,
+        Field(..., gt=0, lt=120, description='enter the patient age')
+    ]
+    gender : Annotated[
+        Literal['male','female','others'],
+        Field(..., description='enter the patient gender from male, female , other' )
+    ]
+    h : Annotated[
+        int,
+        Field(...,gt=0, description='enter the hieght of patient in feet')
+    ]
+    w : Annotated[
+        int,
+        Field(...,gt=0, description='enter the hieght of patient in feet')
+    ]
+
+    @computed_field
+    @property
+    def bmi(self) -> float :
+        calc = round(self.w/(self.h**2),2)
+        return calc
+
+app = FastAPI()
+
+@app.get("/")
+def root():
+    return {'message' : 'the root route is working'}
+
+@app.get("/about")
+def about():
+    return {
+        'purpose' : 'the main purpose is to serve an API-endpoint to the hospital frontend so that they can operate on Paitent data',
+        'Operations' : ' CRUD '
+    }
