@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
 
-from typing import Annotation, Literal
+from typing import Annotated, Literal
 from pydantic import BaseModel, Field, computed_field
 
-
+#first define the schema using pydantic, it's called as model in pydantic
 class Patient(BaseModel) :
     id : Annotated[
         str,
@@ -41,6 +41,10 @@ class Patient(BaseModel) :
         calc = round(self.w/(self.h**2),2)
         return calc
 
+
+# here are the operations done on the database (right now it's JSON database)
+        
+
 app = FastAPI()
 
 @app.get("/")
@@ -53,3 +57,9 @@ def about():
         'purpose' : 'the main purpose is to serve an API-endpoint to the hospital frontend so that they can operate on Paitent data',
         'Operations' : ' CRUD '
     }
+
+# here we'll define the main create operation
+@app.post("/create")
+def create_patient(p : Patient) :
+
+    # load the data
