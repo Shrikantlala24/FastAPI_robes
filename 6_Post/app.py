@@ -40,8 +40,10 @@ class Patient(BaseModel) :
     @computed_field
     @property
     def bmi(self) -> float:
+        height_in_m = self.height / 100
+
         return round(
-            self.weight/(self.height **2),
+            self.weight / (height_in_m ** 2),
             2
         )
 
@@ -71,17 +73,20 @@ def about():
 
 @app.get("/view")
 def view_data():
+    data = load_data()
+    return JSONResponse(content=data)
 
 # Here is the main endpoint :-
 #? Post method to create patients
 
 @app.post('/create')
 def create_patient(patient : Patient):
+
     # Load the data
     data = load_data()    
 
     # Check if the patient ID already exists
-    if patient.pid in data:
+    if patient.id in data:
         raise HTTPException(status_code=400, detail='patient already exist')
 
     # add new patient in the data
@@ -89,4 +94,13 @@ def create_patient(patient : Patient):
 
     # save the data in the JSON file
     save_data(data)
-    raise JSONResponse(status_code=201, content = {'message':'Patient succesfully created ✅'})
+    return JSONResponse(
+        status_code=201, 
+        content = {'message':'Patient succesfully created ✅'}
+        )
+
+
+@app.put("/update")
+def Update_patient(patient : Patient) :
+    pass
+
