@@ -105,7 +105,7 @@ def view_all():
 def view_patient(pid : str) :
     data = load_data()
     if pid not in data :
-        raise HTTPException(status_code=404, detail='patient not found')
+        raise HTTPException(status_code=404, detail='patient not found ❌')
     return data[pid]
 
 
@@ -122,14 +122,14 @@ def create_patient(p : Patient) :
 
     # check if patient already exists
     if p.id in data :
-        raise HTTPException(status_code= 400, detail = 'patient already exists')
+        raise HTTPException(status_code= 400, detail = 'patient already exists ❗')
 
     # insert the 'patient' in 'data'
-    data[p.id] = p.model_dump(exclude='id')
+    data[p.id] = p.model_dump(exclude={"id"})
 
     # save the data in the JSON database
     save_data(data)
-    return JSONResponse(status_code = 201, content = {'message': 'Paitent created Succesfully and inserted in the Database'})
+    return JSONResponse(status_code = 201, content = {'message': 'Paitent created Succesfully ✅'})
 
 # ----------------------------------------------------------------------------------------------------------------
 # Here is the most complicated, the UPDATE operation
@@ -141,13 +141,13 @@ def update_patient(pid : str, p_update : PatientUpdate) :
 
     # check if patient exists
     if pid not in data:
-        raise HTTPException(status_code=404, detail='patient not found')
+        raise HTTPException(status_code=404, detail='patient not found ❌')
 
     # filling the updated values by creating 'existing' and 'updated' variables
     existing = data[pid]
     updated = p_update.model_dump(exclude_unset=True)
 
-    for key, value in updated.items:
+    for key, value in updated.items():
         existing[key] = value
 
         # here 'existing' has now updated values along with old values
@@ -161,11 +161,30 @@ def update_patient(pid : str, p_update : PatientUpdate) :
     final_Patient = Patient(**existing)
 
     # last -> add the final_patient in data
-    data[pid] = final_patient.model_dump(exclude='id')
+    data[pid] = final_Patient.model_dump(exclude={"id"})
 
     # save the data
     save_data(data)
 
     # Return response\
     return JSONResponse(status_code=201, content={'message': 'Patient updated succesfully ✅'})
-    
+
+
+@app.delete("/delete/{pid}")
+def delete_patient(pid : str) :
+
+    # load the data
+    data = load_data()
+
+    # check if patient -> exist or not
+    if pid not in data:
+        raise HTTPException(status_code=404, detail = 'patient Not found ❌')
+
+    # delete the patient simply
+    del data[pid]
+
+    # save the data
+    save_data(data)
+
+    # response
+    return JSONResponse(status_code=200, content={'message':'Patient deleted succesfully ✅'})
