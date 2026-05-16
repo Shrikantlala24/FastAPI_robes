@@ -40,9 +40,24 @@ if st.button("Get /about"):
     about = api_get("/about")
     if about:
         st.json(about)
-
 st.header("View Patients")
-if st.button("Refresh /view"):
+
+# All widgets exist on every rerun
+pid = st.text_input("Enter Patient ID to view", value="")
+submit = st.button("View Patient")
+
+if submit and pid:
+    patient = api_get(f"/view/{pid}")
+    if patient:
+        st.subheader(f"ID: {pid}")
+        st.write(f"Name: {patient.get('name')}")
+        st.write(f"City: {patient.get('city')}")
+        st.write(f"Age: {patient.get('age')}")
+    else:
+        st.error("Patient not found or API error")
+
+        
+if st.button("Refresh /view all"):
     data = api_get("/view")
     if data is None:
         st.stop()
